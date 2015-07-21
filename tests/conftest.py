@@ -1,7 +1,8 @@
 import sys
 import os
 
-import pytest
+from pytest import fixture
+
 from mock import Mock
 
 sys.path.insert(0, os.path.abspath(
@@ -19,7 +20,7 @@ def pytest_runtest_setup(item):
         pytest.skip("need --display-integration option to run")
 
 
-@pytest.fixture
+@fixture
 def receiver(request):
     """Return receiver instance or mockup version"""
 
