@@ -1,7 +1,7 @@
 import sys
 import os
 
-from pytest import fixture
+import pytest
 
 from mock import Mock
 
@@ -20,7 +20,7 @@ def pytest_runtest_setup(item):
         pytest.skip("need --display-integration option to run")
 
 
-@fixture
+@pytest.fixture
 def receiver(request):
     """Return receiver instance or mockup version"""
 
