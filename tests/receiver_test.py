@@ -4,6 +4,8 @@ from mock import Mock
 
 from weatherstation.receiver import MicrochipReceiver
 
+import pytest
+
 def test_read_data():
     """Test reading from the device
 
@@ -46,3 +48,50 @@ def test_write_data():
     data = receiver.write_data(expected_data)
 
     device.write.assert_called_once_with(1, [2, 1, 1, 'foo'], 0)
+
+
+@pytest.mark.display_integration
+def test_display_integration(receiver):
+    """@todo: Docstring for test_display_control.
+
+    :arg1: @todo
+    :returns: @todo
+
+    """
+
+    measurement = {
+        "direction_min": 170,
+        "direction_avg": 185,
+        "direction_max": 240,
+        "speed_min": 7.2,
+        "speed_avg": 9.9,
+        "speed_max": 13.2,
+        "temperature": 23.3
+    }
+
+    display_address = [80,80,80]
+
+    base = ord("0")
+
+    data_text = "%s,%s,%s,%s,%s,%s,%s" % (
+        measurement["direction_min"],
+        measurement["direction_avg"],
+        measurement["direction_max"],
+        measurement["speed_min"],
+        measurement["speed_avg"],
+        measurement["speed_max"],
+        measurement["temperature"])
+
+    data_payload = []
+
+    for char in data_text:
+        data_payload.append(ord(char) - ord("0"))
+
+    data_packet = display_address + data_payload
+
+    num = receiver.write(data_packet)
+
+    print 'Wrote %s bytes' % str(num)
+
+
+
