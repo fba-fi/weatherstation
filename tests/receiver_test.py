@@ -89,7 +89,7 @@ def test_display_integration(receiver):
 
     data_packet = display_address + data_payload
 
-    num = receiver.write(data_packet)
+    num = receiver.write_data(data_packet)
 
     print 'Wrote %s bytes' % str(num)
 
