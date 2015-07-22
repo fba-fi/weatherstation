@@ -91,7 +91,7 @@ def test_display_integration(receiver):
 
     data_packet = display_address + [
         48,54,53,44,49,57,48,44,50,48,48,44,51,46,
-        50,44,53,46,56,44,49,48,46,52,44,49,57,46,54]
+        50,44,53,46,56,44,49,48,46,52,44,49,57,46,54] + [0]
 
     num = receiver.write_data(data_packet)
 
