@@ -113,7 +113,10 @@ class MicrochipReceiver(object):
         if message != '':
             data += [len(message)] + message
 
-        self.device.write(1, data, 0)
+        pipe_number = 0x01
+        timeout = 0
+
+        self.device.write(pipe_number, data, timeout)
 
         pipe_number = 0x81
         length = 64
@@ -173,3 +176,17 @@ class MicrochipReceiver(object):
 
         """
         return self.read(DATA)
+
+    def read_config(address, length):
+        """Read configuration from device
+
+        :address: Configuration register address
+        :length: Length of register
+        :returns: Configuration register
+
+        """
+
+        data = [0 for x in range(length)]
+        data[0] = address
+
+        return self.read(CONFIG, data)

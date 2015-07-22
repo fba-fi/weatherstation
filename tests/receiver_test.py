@@ -96,3 +96,14 @@ def test_display_integration(receiver):
         print 'Wrote %s bytes' % str(num)
 
         time.sleep(0.2)
+
+
+@pytest.mark.receiver_integration
+def test_usb_config(receiver):
+    """@todo: Docstring for test_usb_config.
+
+    :arg1: @todo
+    :returns: @todo
+
+    """
+    pass
