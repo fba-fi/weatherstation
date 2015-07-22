@@ -6,6 +6,8 @@ from weatherstation.receiver import MicrochipReceiver
 
 import pytest
 
+import time
+
 def test_read_data():
     """Test reading from the device
 
@@ -59,43 +61,38 @@ def test_display_integration(receiver):
 
     """
 
-    measurement = {
-        "direction_min": 170,
-        "direction_avg": 185,
-        "direction_max": 240,
-        "speed_min": 7.2,
-        "speed_avg": 9.9,
-        "speed_max": 13.2,
-        "temperature": 23.3
-    }
+    for direction in range(0, 10000, 10):
 
-    display_address = [80,80,80]
+        measurement = {
+            "direction_min": (direction) % 360,
+            "direction_avg": (direction + 15) % 360,
+            "direction_max": (direction + 30) % 360,
+            "speed_min": 22.2,
+            "speed_avg": 25.0,
+            "speed_max": 34.2,
+            "temperature": 27.7
+        }
 
-    base = ord("0")
+        display_address = [80,80,80]
 
-    data_text = "%s,%s,%s,%s,%s,%s,%s" % (
-        measurement["direction_min"],
-        measurement["direction_avg"],
-        measurement["direction_max"],
-        measurement["speed_min"],
-        measurement["speed_avg"],
-        measurement["speed_max"],
-        measurement["temperature"])
+        base = ord("0")
 
-    data_payload = []
+        data_text = "%03.0f,%03.0f,%03.0f,%0.1f,%0.1f,%0.1f,%0.1f" % (
+            measurement["direction_min"],
+            measurement["direction_avg"],
+            measurement["direction_max"],
+            measurement["speed_min"],
+            measurement["speed_avg"],
+            measurement["speed_max"],
+            measurement["temperature"])
 
-    for char in data_text:
-        data_payload.append(ord(char) - ord("0"))
+        for char in data_text:
+            data_payload.append(ord(char))
 
-    data_packet = display_address + data_payload
+        data_packet = display_address + data_payload + [0]
 
-    data_packet = display_address + [
-        48,54,53,44,49,57,48,44,50,48,48,44,51,46,
-        50,44,53,46,56,44,49,48,46,52,44,49,57,46,54] + [0]
+        num = receiver.write_data(data_packet)
 
-    num = receiver.write_data(data_packet)
+        print 'Wrote %s bytes' % str(num)
 
-    print 'Wrote %s bytes' % str(num)
-
-
-
+        time.sleep(0.2)
