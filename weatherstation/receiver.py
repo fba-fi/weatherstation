@@ -97,6 +97,8 @@ class MicrochipReceiver(object):
 
         self.release()
 
+        return bytes_written
+
     def read(self, message_type, message=''):
         """Read data from the device
 
@@ -112,7 +114,12 @@ class MicrochipReceiver(object):
             data += [len(message)] + message
 
         self.device.write(1, data, 0)
-        data = self.device.read(0x81, 64, 100)
+
+        pipe_number = 0x81
+        length = 64
+        timeout = 100
+
+        data = self.device.read(pipe_number, length, timeout)
 
         self.release()
 
