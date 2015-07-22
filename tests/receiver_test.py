@@ -61,7 +61,7 @@ def test_display_integration(receiver):
 
     """
 
-    for direction in range(0, 10000, 10):
+    for direction in range(0, 360, 10):
 
         measurement = {
             "direction_min": (direction) % 360,
